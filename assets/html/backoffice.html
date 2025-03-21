@@ -61,6 +61,11 @@
       </nav>
     </header>
     <main class="flex-grow-1">
+      <div class="text-center" id="spinner-container">
+        <div class="text-success spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
       <h1 class="text-center text-white">LLeo Games</h1>
       <h2 class="text-center text-white">Nuovo Gioco</h2>
       <div class="container">
@@ -125,7 +130,9 @@
               <button type="submit" class="btn btn-success">
                 Aggiungi gioco allo store
               </button>
-              <button type="reset" class="btn btn-secondary">Reset</button>
+              <button type="reset" class="btn btn-secondary" id="reset-button">
+                Reset
+              </button>
             </form>
           </div>
         </div>

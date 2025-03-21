@@ -1,6 +1,11 @@
 const getGames = function () {
   const gameURL = 'https://striveschool-api.herokuapp.com/api/product/';
 
+  const hideSpinner = function () {
+    const div = document.getElementById('spinner-container');
+    div.classList.add('d-none');
+  };
+
   fetch(gameURL, {
     headers: {
       Authorization:
@@ -16,6 +21,7 @@ const getGames = function () {
       }
     })
     .then((data) => {
+      hideSpinner();
       console.log('DATI RICEVUTI DAL SERVER', data);
 
       const row = document.getElementById('games-row');
@@ -29,15 +35,16 @@ const getGames = function () {
      
                 <img src="${game.imageUrl}" class="card-img-top" style="height:200px" alt="${game.name}" />
                 <div class="card-body pb-0  d-flex flex-column bg-secondary" style="height:355px">
-                
+                 <a href="details.html?id=${game._id}" style=" text-decoration: none"> 
                   <h5 class="card-title">${game.name}</h5>
                   <p class="card-text" style="font-size:0.4em; text-decoration:none;">${game.description}</p>
                   <div class=" mt-auto mb-1">
                   <p class="card-text mt-auto" style="font-size:0.4em; text-decoration:none;">${game.brand}</p>
                   <p class="card-text" style="font-size:0.4em; text-decoration:none;">${game.price}€
                      <div>
-                  <a href="../html/details.html?id=${game._id}" class="btn btn-success style="font-size:0.5em; text-decoration:none;">Giochiamo!</a>
-                  <a href="../html/details.html?id=${game._id}" class="btn btn-success style="font-size:0.em; text-decoration:none;">Modifica</a>
+                  <a href="../html/details.html?id=${game._id}" class="btn btn-success" style="font-size: 0.5em;">Gioca!</a>
+<a href="../html/backoffice.html?id=${game._id}" class="btn btn-warning" style="font-size: 0.5em;">Modifica</a>
+
                 </div>
                 </div>
               </div>

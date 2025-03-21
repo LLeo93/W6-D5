@@ -2,7 +2,10 @@ const URLparameters = new URLSearchParams(location.search);
 
 const gameId = URLparameters.get('id');
 console.log('gameId:', gameId);
-
+const hideSpinner = function () {
+  const div = document.getElementById('spinner-container');
+  div.classList.add('d-none');
+};
 // URL dell'API per ottenere i dettagli del gioco
 const gameURL = 'https://striveschool-api.herokuapp.com/api/product/';
 
@@ -24,7 +27,12 @@ const getGameDetails = function () {
       }
     })
     .then((data) => {
+      hideSpinner();
       console.log('DETTAGLI GIOCO', data);
+      console.log(
+        'Struttura completa dei dati:',
+        JSON.stringify(data, null, 2)
+      );
       // Riempio i dettagli nella pagina
       const nameInput = document.getElementById('name');
       const descriptionInput = document.getElementById('description');

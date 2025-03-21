@@ -1,3 +1,7 @@
+const hideSpinner = function () {
+  const div = document.getElementById('spinner-container');
+  div.classList.add('d-none');
+};
 const getData = function () {
   fetch('https://striveschool-api.herokuapp.com/api/product/', {
     headers: {
@@ -15,6 +19,7 @@ const getData = function () {
       }
     })
     .then((data) => {
+      hideSpinner();
       console.log('DATI RICEVUTI DAL SERVER', data);
     })
     .catch((error) => {
@@ -35,7 +40,6 @@ class Game {
 const URLparameters = new URLSearchParams(location.search);
 const gameId = URLparameters.get('id');
 
-//riferimento dal form
 const nameInput = document.getElementById('name');
 const urlInput = document.getElementById('imageUrl');
 const descriptionInput = document.getElementById('description');
@@ -57,12 +61,8 @@ form.addEventListener('submit', function (e) {
   );
 
   console.log('gioco', game);
-  console.log('priceInput.value:', priceInput.value); // Aggiungi questo log
-  console.log('typeof priceInput.value:', typeof priceInput.value); // Verifica il tipo
-
-  // ora il bello: lo salviamo in modo persistente nel DB
-  // nota positiva: in un'API di tipo RESTFUL, l'URL su cui fate la GET generica
-  // è anche l'URL per fare una POST!
+  console.log('priceInput.value:', priceInput.value);
+  console.log('typeof priceInput.value:', typeof priceInput.value);
 
   let methodToUse;
   let URLtoUse;
@@ -76,8 +76,8 @@ form.addEventListener('submit', function (e) {
   }
 
   fetch(URLtoUse, {
-    method: methodToUse, // metodo post per creazione nuovo gioco
-    body: JSON.stringify(game), // oggetto game convertito in stringa JSON
+    method: methodToUse,
+    body: JSON.stringify(game),
     headers: {
       Authorization:
         'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2RkMWU5OTM4MzRiZjAwMTUwMDA2ZjAiLCJpYXQiOjE3NDI1NDQ1MzgsImV4cCI6MTc0Mzc1NDEzOH0.J7KGFh9DOjoPA6bRLypVJeFfExEU4jsOjM2N98yFMD4',
@@ -85,19 +85,37 @@ form.addEventListener('submit', function (e) {
     },
   })
     .then((response) => {
-      // la response ci dice se il salvataggio del nostro concerto è andato a buon fine o meno
       if (response.ok) {
-        // il salvataggio ha funzionato!
         alert('SALVATAGGIO COMPLETATO!');
-        // io nella pagina backoffice non avrei bisogno di recuperare il JSON dalla response
-        // direi che potremmo semplicemente svuotare il form e finire qua
-        form.reset(); // svuoto il form
+
+        form.reset(); //
       } else {
-        // 400, 401, 500 etc.
         throw new Error('ricevuta response non ok dal backend');
       }
+    })
+    .then((data) => {
+      // Carica i dettagli del gioco nel form
+      document.getElementById('name').value = data.name;
+      document.getElementById('brand').value = data.brand;
+      document.getElementById('imageUrl').value = data.imageUrl;
+      document.getElementById('description').value = data.description;
+      document.getElementById('price').value = data.price;
     })
     .catch((err) => {
       console.log('errore nel salvataggio!', err);
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  const resetButton = document.getElementById('reset-Button');
+  resetButton.addEventListener('click', function (event) {
+    // Mostra la finestra di conferma
+    const confirmation = window.confirm(
+      'Sei sicuro di voler resettare i dati? Questa azione è irreversibile.'
+    );
+
+    if (confirmation) {
+      resetForm();
+    }
+  });
 });
