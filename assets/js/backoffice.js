@@ -119,3 +119,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+document.addEventListener('DOMContentLoaded', function () {
+  const add = document.getElementById('add');
+  resetButton.addEventListener('click', function () {
+    const confirmation = window.confirm('Aggiungiamo?');
+
+    if (confirmation) {
+      resetForm();
+    }
+  });
+});
